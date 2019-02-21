@@ -104,10 +104,17 @@
                        type="text"
                        @click="handleEditSort(scope.$index, scope.row)">设置排序
             </el-button>
-            <el-button size="mini"
+            <!-- <el-button size="mini"
                        type="text"
                        @click="handleDelete(scope.$index, scope.row)">删除
-            </el-button>
+            </el-button> -->
+            <!-- <el-button size="mini"
+                       type="text"
+                       @click="handleView(scope.$index, scope.row)">查看</el-button> -->
+            <el-button size="mini"
+                       type="text"
+                       @click="handleUpdate(scope.$index, scope.row)">
+              编辑</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -255,10 +262,31 @@ export default {
       this.getList();
     },
     handleShowStatusChange (index, row) {
-      this.updateFloorShow(row.id, row.recommendStatus);
+      this.handleUpdateFloorShow(row.id, row.showStatus);
     },
-    handleDelete (index, row) {
-      this.deleteBrand(row.id);
+    handleUpdateFloorShow (ids, status) {
+      this.$confirm('是否要启用?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        let params = new URLSearchParams();
+        params.append("ids", ids);
+        params.append("status", status);
+        updateFloorShow(params).then(response => {
+          this.getList();
+          this.$message({
+            type: 'success',
+            message: '修改成功!'
+          });
+        });
+      }).catch(() => {
+        this.$message({
+          type: 'success',
+          message: '已取消操作!'
+        });
+        this.getList();
+      });
     },
     handleBatchOperate () {
       if (this.multipleSelection < 1) {
@@ -291,52 +319,12 @@ export default {
     handleAdd () {
       this.$router.push({ path: '/sms/addFloor' })
     },
+
+    handleUpdate (index, row) {
+      this.$router.push({ path: '/sms/updateFloor', query: { id: row.id } })
+    },
     handleSelectSearch () {
       this.getDialogList();
-    },
-    handleDialogSizeChange (val) {
-      this.dialogData.listQuery.pageNum = 1;
-      this.dialogData.listQuery.pageSize = val;
-      this.getDialogList();
-    },
-    handleDialogCurrentChange (val) {
-      this.dialogData.listQuery.pageNum = val;
-      this.getDialogList();
-    },
-    handleDialogSelectionChange (val) {
-      this.dialogData.multipleSelection = val;
-    },
-    handleSelectDialogConfirm () {
-      if (this.dialogData.multipleSelection < 1) {
-        this.$message({
-          message: '请选择一条记录',
-          type: 'warning',
-          duration: 1000
-        });
-        return;
-      }
-      let selectBrands = [];
-      for (let i = 0; i < this.dialogData.multipleSelection.length; i++) {
-        selectBrands.push({
-          brandId: this.dialogData.multipleSelection[i].id,
-          brandName: this.dialogData.multipleSelection[i].name
-        });
-      }
-      this.$confirm('使用要进行添加操作?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        createHomeBrand(selectBrands).then(response => {
-          this.selectDialogVisible = false;
-          this.dialogData.multipleSelection = [];
-          this.getList();
-          this.$message({
-            type: 'success',
-            message: '添加成功!'
-          });
-        });
-      });
     },
     handleEditSort (index, row) {
       this.sortDialogVisible = true;
@@ -366,30 +354,6 @@ export default {
         this.list = response.data.list;
         this.total = response.data.total;
       })
-    },
-    updateRecommendStatusStatus (ids, status) {
-      this.$confirm('是否要修改启用状态?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        let params = new URLSearchParams();
-        params.append("ids", ids);
-        params.append("recommendStatus", status);
-        updateRecommendStatus(params).then(response => {
-          this.getList();
-          this.$message({
-            type: 'success',
-            message: '修改成功!'
-          });
-        });
-      }).catch(() => {
-        this.$message({
-          type: 'success',
-          message: '已取消操作!'
-        });
-        this.getList();
-      });
     },
     deleteBrand (ids) {
       this.$confirm('是否要删除该楼层?', '提示', {

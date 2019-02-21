@@ -14,7 +14,12 @@ export function updateFloorShow (data) {
     data: data
   })
 }
-
+export function getFloor (id) {
+  return request({
+    url: '/floor/' + id,
+    method: 'get',
+  })
+}
 export function updateFloor (id, data) {
   return request({
     url: '/floor/update/' + id,

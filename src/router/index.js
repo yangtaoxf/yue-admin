@@ -199,7 +199,7 @@ export const constantRouterMap = [
     component: Layout,
     redirect: '/sms/coupon',
     name: 'sms',
-    meta: { title: '营销', icon: 'sms' },
+    meta: { title: '运营', icon: 'sms' },
     children: [
       {
         path: 'flash',
@@ -309,7 +309,14 @@ export const constantRouterMap = [
         path: 'addFloor',
         name: 'addFloor',
         component: () => import('@/views/sms/floor/add'),
-        meta: { title: '添加优惠券' },
+        meta: { title: '添加页面楼层设置' },
+        hidden: true
+      },
+      {
+        path: 'updateFloor',
+        name: 'updateFloor',
+        component: () => import('@/views/sms/floor/update'),
+        meta: { title: '修改页面楼层设置' },
         hidden: true
       },
     ]

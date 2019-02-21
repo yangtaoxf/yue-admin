@@ -1,7 +1,7 @@
 <template> 
   <div>
     <el-upload
-      action="http://macro-oss.oss-cn-shenzhen.aliyuncs.com"
+      action="http://ninesub-oss.oss-cn-shanghai.aliyuncs.com"
       :data="dataObj"
       list-type="picture"
       :multiple="false" :show-file-list="showFileList"

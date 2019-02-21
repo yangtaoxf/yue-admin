@@ -6,7 +6,8 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import locale from 'element-ui/lib/locale/lang/zh-CN' // lang i18n
 import VCharts from 'v-charts'
-
+import Antd from 'ant-design-vue';
+import 'ant-design-vue/dist/antd.css';
 import '@/styles/index.scss' // global css
 
 import App from './App'
@@ -16,8 +17,15 @@ import store from './store'
 import '@/icons' // icon
 import '@/permission' // permission control
 
+import * as filters from './filters/filters'
+Object.keys(filters).forEach(key => {
+  Vue.filter(key, filters[key])
+})
+
+Vue.use(Antd);
 Vue.use(ElementUI, { locale })
 Vue.use(VCharts)
+
 
 Vue.config.productionTip = false
 
