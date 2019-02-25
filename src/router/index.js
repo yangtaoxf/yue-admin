@@ -32,6 +32,9 @@ export const constantRouterMap = [
       meta: { title: '首页', icon: 'home' }
     }]
   },
+
+
+
   {
     path: '/pms',
     component: Layout,
@@ -192,6 +195,28 @@ export const constantRouterMap = [
         meta: { title: '退货原因详情' },
         hidden: true
       }
+    ]
+  },
+
+  {
+    path: '/ums',
+    component: Layout,
+    redirect: '/ums/member',
+    name: 'ums',
+    meta: { title: '会员管理', icon: 'et-user' },
+    children: [
+      {
+        path: 'member',
+        name: 'member',
+        component: () => import('@/views/ums/member'),
+        meta: { title: '会员管理', icon: 'user' }
+      },
+      {
+        path: 'address',
+        name: 'address',
+        component: () => import('@/views/ums/address'),
+        meta: { title: '收货地址', icon: 'user' }
+      },
     ]
   },
   {

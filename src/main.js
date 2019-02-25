@@ -13,11 +13,13 @@ import '@/styles/index.scss' // global css
 import App from './App'
 import router from './router'
 import store from './store'
+import global_ from './global'//引用文件
+Vue.prototype.$global_ = global_
 
 import '@/icons' // icon
 import '@/permission' // permission control
 
-import * as filters from './filters/filters'
+import * as filters from './filters'
 Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key])
 })

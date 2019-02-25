@@ -81,7 +81,7 @@
         <el-table-column label="广告位置"
                          width="120"
                          align="center">
-          <template slot-scope="scope">{{scope.row.type | formatType}}</template>
+          <template slot-scope="scope">{{scope.row.type | formatAdvertiseType}}</template>
         </el-table-column>
         <el-table-column label="广告图片"
                          align="center">
@@ -166,7 +166,6 @@
 </template>
 <script>
 import { fetchList, updateStatus, deleteHomeAdvertise } from '@/api/homeAdvertise';
-import { formatDate } from '@/utils/date';
 const defaultListQuery = {
   pageNum: 1,
   pageSize: 5,
@@ -174,22 +173,13 @@ const defaultListQuery = {
   type: null,
   endTime: null
 };
-const defaultTypeOptions = [
-  {
-    label: 'PC首页轮播',
-    value: 0
-  },
-  {
-    label: 'APP首页轮播',
-    value: 1
-  }
-];
+
 export default {
   name: 'homeAdvertiseList',
   data () {
     return {
       listQuery: Object.assign({}, defaultListQuery),
-      typeOptions: Object.assign({}, defaultTypeOptions),
+      typeOptions: Object.assign({}, this.$global_.defaultAdvertiseTypeOptions),
       list: null,
       total: null,
       listLoading: false,
@@ -206,22 +196,7 @@ export default {
   created () {
     this.getList();
   },
-  filters: {
-    formatType (type) {
-      if (type === 1) {
-        return 'APP首页轮播';
-      } else {
-        return 'PC首页轮播';
-      }
-    },
-    formatTime (time) {
-      if (time == null || time === '') {
-        return 'N/A';
-      }
-      let date = new Date(time);
-      return formatDate(date, 'yyyy-MM-dd hh:mm:ss')
-    },
-  },
+
   methods: {
     handleResetSearch () {
       this.listQuery = Object.assign({}, defaultListQuery);
