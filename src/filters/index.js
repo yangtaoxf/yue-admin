@@ -8,7 +8,24 @@ export function levelFilter (value) {
     return '二级';
   }
 }
-
+export function memberStatus (val) {
+  var label = "未知状态";
+  switch (val) {
+    case -1:
+      label = '禁用';
+      break;
+    case -2:
+      label = '注销';
+      break;
+    case 0:
+      label = '未启用';
+      break;
+    case 1:
+      label = '启用';
+      break;
+  }
+  return label;
+}
 export function formatAdvertiseType (type) {
   var aTypes = global_.defaultAdvertiseTypeOptions
   for (var index in aTypes) {

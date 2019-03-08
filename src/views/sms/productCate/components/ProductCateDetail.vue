@@ -5,23 +5,36 @@
              :rules="rules"
              ref="productCateFrom"
              label-width="150px">
-      <el-form-item label="分类名称："
+      <el-form-item label="类目名称："
                     prop="name">
         <el-input v-model="productCate.name"></el-input>
       </el-form-item>
-      <el-form-item label="上级分类：">
-        <el-select v-model="productCate.parentId"
-                   placeholder="请选择分类">
-          <el-option v-for="item in selectProductCateList"
-                     :key="item.id"
-                     :label="item.name"
-                     :value="item.id">
-          </el-option>
-        </el-select>
+
+      <el-form-item label="上级类目："
+                    prop="parentId">
+        <el-cascader v-model="selectParentCateValue"
+                     :options="selectProductCateList"
+                     :change-on-select="true"
+                     expand-trigger="hover">
+        </el-cascader>
       </el-form-item>
-      <el-form-item label="数量单位：">
-        <el-input v-model="productCate.productUnit"></el-input>
+
+      <el-form-item v-for="(productCate, index) in filterProductCateList"
+                    :label="index | backCateFilter"
+                    :key="productCate.id">
+        <el-cascader clearable
+                     v-model="productCate.value"
+                     :options="filterCates">
+        </el-cascader>
+        <el-button style="margin-left: 20px"
+                   @click.prevent="removeFilterProductCate(productCate)">删除</el-button>
       </el-form-item>
+      <el-form-item>
+        <el-button size="small"
+                   type="primary"
+                   @click="handleAddFilterProductCate()">新增</el-button>
+      </el-form-item>
+
       <el-form-item label="排序：">
         <el-input v-model="productCate.sort"></el-input>
       </el-form-item>
@@ -37,31 +50,30 @@
           <el-radio :label="0">否</el-radio>
         </el-radio-group>
       </el-form-item> -->
-      <el-form-item label="分类图标：">
+      <el-form-item label="类目图标：">
         <single-upload v-model="productCate.icon"></single-upload>
       </el-form-item>
-      <!-- <el-form-item v-for="(filterProductAttr, index) in filterProductAttrList"
+      <el-form-item v-for="(filterProductAttr, index) in filterProductAttrList"
                     :label="index | filterLabelFilter"
-                    :key="filterProductAttr.key"
-      >
-        <el-cascader
-          clearable
-          v-model="filterProductAttr.value"
-          :options="filterAttrs">
+                    :key="filterProductAttr.key">
+        <el-cascader clearable
+                     v-model="filterProductAttr.value"
+                     :options="filterAttrs">
         </el-cascader>
-        <el-button style="margin-left: 20px" @click.prevent="removeFilterAttr(filterProductAttr)">删除</el-button>
+        <el-button style="margin-left: 20px"
+                   @click.prevent="removeFilterAttr(filterProductAttr)">删除</el-button>
       </el-form-item>
       <el-form-item>
         <el-button size="small"
                    type="primary"
                    @click="handleAddFilterAttr()">新增</el-button>
-      </el-form-item> -->
-      <!-- <el-form-item label="关键词：">
+      </el-form-item>
+      <el-form-item label="关键词：">
         <el-input v-model="productCate.keywords"></el-input>
-      </el-form-item> -->
+      </el-form-item>
       <el-form-item label="分类描述：">
         <el-input type="textarea"
-                  :autosize="{ minRows: 2, maxRows: 4}"
+                  :autosize="true"
                   v-model="productCate.description"></el-input>
       </el-form-item>
       <el-form-item>
@@ -75,11 +87,11 @@
 </template>
 
 <script>
-import { fetchList, createProductCate, updateProductCate, getProductCate } from '@/api/productCate';
+import { fetchList, createProductCate, updateProductCate, getProductCate, fetchListWithChildren } from '@/api/productFrontCate';
 import { fetchListWithAttr } from '@/api/productAttrCate';
 import { getProductAttrInfo } from '@/api/productAttr';
 import SingleUpload from '@/components/Upload/singleUpload';
-
+import { fetchListWithChildren as fetchListWithProductCate } from '@/api/productCate'
 const defaultProductCate = {
   description: '',
   icon: '',
@@ -90,7 +102,8 @@ const defaultProductCate = {
   productUnit: '',
   showStatus: 0,
   sort: 0,
-  productAttributeIdList: []
+  productAttributeIdList: [],
+  backCategoryIdList: []
 };
 export default {
   name: "ProductCateDetail",
@@ -104,23 +117,49 @@ export default {
   data () {
     return {
       productCate: Object.assign({}, defaultProductCate),
+      selectParentCateValue: [],
       selectProductCateList: [],
       rules: {
         name: [
-          { required: true, message: '请输入品牌名称', trigger: 'blur' },
+          { required: true, message: '请输入类目名称', trigger: 'blur' },
           { min: 2, max: 140, message: '长度在 2 到 140 个字符', trigger: 'blur' }
         ]
       },
       filterAttrs: [],
       filterProductAttrList: [{
         value: []
+      }],
+      filterCates: [],
+      filterProductCateList: [{
+        value: []
       }]
     }
   },
   created () {
+    this.getProductCateList();
+    this.getSelectProductCateList();
+    this.getProductAttrCateList();
     if (this.isEdit) {
       getProductCate(this.$route.query.id).then(response => {
         this.productCate = response.data;
+        this.selectParentCateValue.push(this.productCate.parentId);
+        this.filterProductCateList = [];
+        var backCategoryList = this.productCate.backCategoryList;
+        for (let i = 0; i < backCategoryList.length; i++) {
+          let back = backCategoryList[i];
+          let valStr = back.path.split(",");
+          let val = [];
+          for (var j = 0; j < valStr.length; j++) {
+            val.push(parseInt(valStr[j]));
+          }
+          val.push(back.id);
+          console.log(val);
+          let cateItem = {
+            id: back.id,
+            value: val
+          }
+          this.filterProductCateList.push(cateItem);
+        }
       });
       getProductAttrInfo(this.$route.query.id).then(response => {
         if (response.data != null && response.data.length > 0) {
@@ -133,20 +172,53 @@ export default {
           }
         }
       });
+
     } else {
       this.productCate = Object.assign({}, defaultProductCate);
     }
-    this.getSelectProductCateList();
-    this.getProductAttrCateList();
+
   },
   methods: {
     getSelectProductCateList () {
-      fetchList(0, { pageSize: 100, pageNum: 1 }).then(response => {
-        this.selectProductCateList = response.data.list;
-        this.selectProductCateList.unshift({ id: 0, name: '无上级分类' });
+      //前台类目
+      fetchListWithChildren().then(response => {
+        let list = response.data;
+        for (let i = 0; i < list.length; i++) {
+          let productCate = list[i];
+          let children = [];
+          if (productCate.children != null && productCate.children.length > 0) {
+            for (let j = 0; j < productCate.children.length; j++) {
+              children.push({
+                label: productCate.children[j].name,
+                value: productCate.children[j].id
+              })
+            }
+          }
+          this.selectProductCateList.push({ label: productCate.name, value: productCate.id, children: children });
+        }
+      });
+    },
+    getProductCateList () {
+      //商品分类
+      fetchListWithProductCate().then(response => {
+        let list = response.data;
+        for (let i = 0; i < list.length; i++) {
+          let productCate = list[i];
+          let children = [];
+          if (productCate.children != null && productCate.children.length > 0) {
+            for (let j = 0; j < productCate.children.length; j++) {
+              children.push({
+                label: productCate.children[j].name,
+                value: productCate.children[j].id
+              })
+            }
+          }
+          this.filterCates.push({ label: productCate.name, value: productCate.id, children: children });
+        }
       });
     },
     getProductAttrCateList () {
+      //属性模版
       fetchListWithAttr().then(response => {
         let list = response.data;
         for (let i = 0; i < list.length; i++) {
@@ -163,6 +235,7 @@ export default {
           this.filterAttrs.push({ label: productAttrCate.name, value: productAttrCate.id, children: children });
         }
       });
+
     },
     getProductAttributeIdList () {
       //获取选中的筛选商品属性
@@ -173,7 +246,21 @@ export default {
           productAttributeIdList.push(item.value[1]);
         }
       }
+
       return productAttributeIdList;
+    },
+    getBackCategoryIdList () {
+      //获取选中的关联品类
+      let backCategoryIdList = [];
+      for (let i = 0; i < this.filterProductCateList.length; i++) {
+        let item = this.filterProductCateList[i];
+        let len = item.value.length;
+        if (item.value != null && len > 0) {
+          backCategoryIdList.push(item.value[len - 1]);
+        }
+      }
+
+      return backCategoryIdList;
     },
     onSubmit (formName) {
       this.$refs[formName].validate((valid) => {
@@ -183,8 +270,9 @@ export default {
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {
+            this.productCate.backCategoryIdList = this.getBackCategoryIdList();
+            this.productCate.productAttributeIdList = this.getProductAttributeIdList();
             if (this.isEdit) {
-              this.productCate.productAttributeIdList = this.getProductAttributeIdList();
               updateProductCate(this.$route.query.id, this.productCate).then(response => {
                 this.$message({
                   message: '修改成功',
@@ -194,7 +282,10 @@ export default {
                 this.$router.back();
               });
             } else {
-              this.productCate.productAttributeIdList = this.getProductAttributeIdList();
+              if (this.selectParentCateValue.length > 0) {
+                var len = this.selectParentCateValue.length;
+                this.productCate.parentId = this.selectParentCateValue[len - 1];
+              }
               createProductCate(this.productCate).then(response => {
                 this.$refs[formName].resetFields();
                 this.resetForm(formName);
@@ -225,6 +316,20 @@ export default {
         value: []
       }];
     },
+    removeFilterProductCate (productCateId) {
+      if (this.filterProductCateList.length === 1) {
+        this.$message({
+          message: '至少要留一个',
+          type: 'warning',
+          duration: 1000
+        });
+        return;
+      }
+      var index = this.filterProductCateList.indexOf(productCateId);
+      if (index !== -1) {
+        this.filterProductCateList.splice(index, 1)
+      }
+    },
     removeFilterAttr (productAttributeId) {
       if (this.filterProductAttrList.length === 1) {
         this.$message({
@@ -252,12 +357,32 @@ export default {
         value: null,
         key: Date.now()
       });
+    },
+    handleAddFilterProductCate () {
+      if (this.filterProductCateList.length === 3) {
+        this.$message({
+          message: '最多添加三个',
+          type: 'warning',
+          duration: 1000
+        });
+        return;
+      }
+      this.filterProductCateList.push({
+        value: null,
+        key: Date.now()
+      });
     }
   },
   filters: {
     filterLabelFilter (index) {
       if (index === 0) {
         return '筛选属性：';
+      } else {
+        return '';
+      }
+    }, backCateFilter (index) {
+      if (index === 0) {
+        return '关联商品分类:';
       } else {
         return '';
       }

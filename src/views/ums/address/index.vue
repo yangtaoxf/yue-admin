@@ -35,62 +35,53 @@
              shadow="never">
       <i class="el-icon-tickets"></i>
       <span>数据列表</span>
-      <el-button size="mini"
-                 class="btn-add"
-                 @click="handleAdd()">添加</el-button>
+
     </el-card>
     <div class="table-container">
       <el-table ref="homeBrandTable"
                 :data="list"
                 style="width: 100%;"
+                stripe=true
                 @selection-change="handleSelectionChange"
                 v-loading="listLoading"
                 border>
         <el-table-column type="selection"
                          width="60"
                          align="center"></el-table-column>
-        <el-table-column align="center"
-                         width="100px"
-                         label="地址ID"
-                         prop="id"
-                         sortable />
-        <el-table-column align="center"
-                         width="100px"
-                         label="标签"
-                         prop="label" />
-        <el-table-column align="center"
+
+        <el-table-column align="left"
                          min-width="100px"
                          label="会员ID"
                          prop="memberId" />
-        <el-table-column align="center"
+        <el-table-column align="left"
                          min-width="100px"
                          label="收货人名称"
                          prop="name" />
-        <el-table-column align="center"
+        <el-table-column align="left"
                          min-width="100px"
                          label="手机号码"
                          prop="phoneNumber" />
-        <el-table-column align="center"
+        <el-table-column align="left"
                          min-width="100px"
                          label="邮政编码"
                          prop="postCode" />
-        <el-table-column align="center"
+        <el-table-column align="left"
                          min-width="100px"
                          label="省份/直辖市"
                          prop="province" />
-        <el-table-column align="center"
+        <el-table-column align="left"
                          min-width="100px"
                          label="城市"
                          prop="city" />
-        <el-table-column align="center"
+        <el-table-column align="left"
                          min-width="100px"
                          label="区"
                          prop="region" />
-        <el-table-column align="center"
+        <el-table-column align="left"
                          min-width="100px"
                          label="地址(街道)"
                          prop="detailAddress" />
-        <el-table-column align="center"
+        <el-table-column align="left"
                          min-width="300px"
                          label="详细地址"
                          prop="address">

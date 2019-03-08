@@ -31,22 +31,7 @@
                          align="center">
           <template slot-scope="scope">{{scope.row.level | levelFilter}}</template>
         </el-table-column>
-        <!-- <el-table-column label="商品数量" width="100" align="center">
-          <template slot-scope="scope">{{scope.row.productCount }}</template>
-        </el-table-column>
-        <el-table-column label="数量单位" width="100" align="center">
-          <template slot-scope="scope">{{scope.row.productUnit }}</template>
-        </el-table-column>
-        <el-table-column label="导航栏" width="100" align="center">
-          <template slot-scope="scope">
-            <el-switch
-              @change="handleNavStatusChange(scope.$index, scope.row)"
-              :active-value="1"
-              :inactive-value="0"
-              v-model="scope.row.navStatus">
-            </el-switch>
-          </template>
-        </el-table-column> -->
+
         <el-table-column label="是否显示"
                          width="100"
                          align="center">
@@ -71,9 +56,7 @@
                        :disabled="scope.row.level | disableNextLevel"
                        @click="handleShowNextLevel(scope.$index, scope.row)">查看下级
             </el-button>
-            <!-- <el-button size="mini"
-                       @click="handleTransferProduct(scope.$index, scope.row)">转移商品
-            </el-button> -->
+
           </template>
         </el-table-column>
         <el-table-column label="操作"
@@ -106,7 +89,7 @@
 </template>
 
 <script>
-import { fetchList, deleteProductCate, updateShowStatus, updateNavStatus } from '@/api/productCate'
+import { fetchList, deleteProductCate, updateShowStatus, updateNavStatus } from '@/api/productFrontCate'
 
 export default {
   name: "productCateList",
@@ -141,7 +124,7 @@ export default {
       }
     },
     handleAddProductCate () {
-      this.$router.push('/pms/addProductCate');
+      this.$router.push('/sms/addFrontCate');
     },
     getList () {
       this.listLoading = true;
@@ -189,13 +172,13 @@ export default {
       });
     },
     handleShowNextLevel (index, row) {
-      this.$router.push({ path: '/pms/productCate', query: { parentId: row.id } })
+      this.$router.push({ path: '/sms/frontCate', query: { parentId: row.id } })
     },
     handleTransferProduct (index, row) {
-      console.log('handleAddProductCate');
+      console.log('handleAddFrontCate');
     },
     handleUpdate (index, row) {
-      this.$router.push({ path: '/pms/updateProductCate', query: { id: row.id } });
+      this.$router.push({ path: '/sms/updateFrontCate', query: { id: row.id } });
     },
     handleDelete (index, row) {
       this.$confirm('是否要删除该品牌', '提示', {

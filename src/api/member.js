@@ -32,6 +32,14 @@ export function updateMember (params) {
   })
 }
 
+export function updateMemberStatus (params) {
+  return request({
+    url: '/member/update/status',
+    method: 'post',
+    params: params
+  })
+}
+
 export function listAddress (params) {
   return request({
     url: '/address/list',

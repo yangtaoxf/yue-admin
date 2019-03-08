@@ -127,16 +127,16 @@
     <select-product ref="linkProductDialog"
                     :multiSelect="false"
                     @selectdProduct="setLink"></select-product>
-    <selectProductCategory ref="linkCategoryDialog"
-                           :multiSelect="false"
-                           @selectdProductCategory="setLink"></selectProductCategory>
+    <selectFrontCategory ref="linkCategoryDialog"
+                         :multiSelect="false"
+                         @selectdProductCategory="setLink"></selectFrontCategory>
   </div>
 </template>
 <script>
 import { createFloor, getFloor, updateFloor } from '@/api/pageFloor';
 import againUpload from '@/components/Upload/againUpload'
 import selectProduct from '@/components/Select/product'
-import selectProductCategory from '@/components/Select/productCategory'
+import selectFrontCategory from '@/components/Select/frontCategory'
 
 const defaultFloor = {
   pageCode: 'HOME',
@@ -223,7 +223,7 @@ const defaultTemplateContent = {
 }
 export default {
   name: 'FloorDetail',
-  components: { againUpload, selectProduct, selectProductCategory },
+  components: { againUpload, selectProduct, selectFrontCategory },
   props: {
     isEdit: {
       type: Boolean,

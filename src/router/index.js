@@ -203,7 +203,7 @@ export const constantRouterMap = [
     component: Layout,
     redirect: '/ums/member',
     name: 'ums',
-    meta: { title: '会员管理', icon: 'et-user' },
+    meta: { title: '会员管理', icon: 'user-manage' },
     children: [
       {
         path: 'member',
@@ -215,7 +215,7 @@ export const constantRouterMap = [
         path: 'address',
         name: 'address',
         component: () => import('@/views/ums/address'),
-        meta: { title: '收货地址', icon: 'user' }
+        meta: { title: '收货地址', icon: 'address' }
       },
     ]
   },
@@ -224,7 +224,7 @@ export const constantRouterMap = [
     component: Layout,
     redirect: '/sms/coupon',
     name: 'sms',
-    meta: { title: '运营', icon: 'sms' },
+    meta: { title: '运营', icon: 'smsmanage' },
     children: [
       {
         path: 'flash',
@@ -250,14 +250,14 @@ export const constantRouterMap = [
         path: 'flashProductRelation',
         name: 'flashProductRelation',
         component: () => import('@/views/sms/flash/productRelationList'),
-        meta: { title: '秒杀商品列表' },
+        meta: { title: '秒杀商品' },
         hidden: true
       },
       {
         path: 'coupon',
         name: 'coupon',
         component: () => import('@/views/sms/coupon/index'),
-        meta: { title: '优惠券列表', icon: 'sms-coupon' }
+        meta: { title: '优惠券', icon: 'sms-coupon' }
       },
       {
         path: 'addCoupon',
@@ -328,7 +328,7 @@ export const constantRouterMap = [
         path: 'floor',
         name: 'pageFloor',
         component: () => import('@/views/sms/floor/index'),
-        meta: { title: '页面楼层设置', icon: 'floor-settings' }
+        meta: { title: '页面楼层', icon: 'floor-settings' }
       },
       {
         path: 'addFloor',
@@ -342,6 +342,26 @@ export const constantRouterMap = [
         name: 'updateFloor',
         component: () => import('@/views/sms/floor/update'),
         meta: { title: '修改页面楼层设置' },
+        hidden: true
+      },
+      {
+        path: 'frontCate',
+        name: 'frontCate',
+        component: () => import('@/views/sms/productCate/index'),
+        meta: { title: '前台类目', icon: 'fenlei' }
+      },
+      {
+        path: 'addFrontCate',
+        name: 'addFrontCate',
+        component: () => import('@/views/sms/productCate/add'),
+        meta: { title: '添加前台类目' },
+        hidden: true
+      },
+      {
+        path: 'updateFrontCate',
+        name: 'updateFrontCate',
+        component: () => import('@/views/sms/productCate/update'),
+        meta: { title: '修改前台类目' },
         hidden: true
       },
     ]

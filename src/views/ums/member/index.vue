@@ -46,9 +46,9 @@
              shadow="never">
       <i class="el-icon-tickets"></i>
       <span>数据列表</span>
-      <el-button size="mini"
+      <!-- <el-button size="mini"
                  class="btn-add"
-                 @click="handleAdd()">添加</el-button>
+                 @click="handleAdd()">添加</el-button> -->
     </el-card>
     <div class="table-container">
       <el-table ref="homeBrandTable"
@@ -62,12 +62,12 @@
                          align="center"></el-table-column>
         <el-table-column align="left"
                          width="100px"
-                         label="用户ID"
+                         label="会员ID"
                          prop="id"
                          sortable />
 
         <el-table-column align="left"
-                         label="用户名"
+                         label="会员名称"
                          prop="username" />
         <el-table-column align="cenleftter"
                          label="昵称"
@@ -100,7 +100,7 @@
                          label="状态"
                          prop="status">
           <template slot-scope="scope">
-            {{ statusDic[scope.row.status] }}
+            {{ scope.row.status| memberStatus }}
           </template>
         </el-table-column>
         <el-table-column align="left"
@@ -111,9 +111,6 @@
             <el-button type="primary"
                        size="mini"
                        @click="handleUpdate(scope.row)">编辑</el-button>
-            <el-button type="danger"
-                       size="mini"
-                       @click="handleDelete(scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -169,7 +166,7 @@
   </div>
 </template>
 <script>
-import { fetchList, createMember, updateMember } from '@/api/member'
+import { fetchList, createMember, updateMember, updateMemberStatus } from '@/api/member'
 
 const defaultListQuery = {
   pageNum: 1,
@@ -180,11 +177,19 @@ const defaultListQuery = {
 const defaultShowOptions = [
   {
     label: '禁用',
+    value: -1
+  },
+  {
+    label: '未启用',
     value: 0
   },
   {
     label: '启用',
     value: 1
+  },
+  {
+    label: '注销',
+    value: -2
   }
 ];
 export default {
@@ -199,17 +204,18 @@ export default {
       multipleSelection: [],
       operates: [
         {
-          label: "设为启用",
-          value: 0
+          label: "禁用",
+          value: -1
         },
         {
-          label: "取消启用",
+          label: "注销",
+          value: -2
+        },
+        {
+          label: "启用",
           value: 1
-        },
-        {
-          label: "删除",
-          value: 2
         }
+
       ],
       operateType: null,
       selectDialogVisible: false,
@@ -226,8 +232,7 @@ export default {
       sortDialogVisible: false,
       sortDialogData: { sort: 0, id: null },
       genderDic: ['未知', '男', '女'],
-      levelDic: ['普通用户', 'VIP用户', '高级VIP用户'],
-      statusDic: ['可用', '禁用', '注销']
+      levelDic: ['普通用户', 'VIP用户', '高级VIP用户']
     }
   },
   created () {
@@ -262,11 +267,9 @@ export default {
       this.listQuery.pageNum = val;
       this.getList();
     },
-    handleShowStatusChange (index, row) {
-      this.handleUpdateFloorShow(row.id, row.showStatus);
-    },
-    handleUpdateFloorShow (ids, status) {
-      this.$confirm('是否要启用?', '提示', {
+
+    handleUpdateStatus (ids, status) {
+      this.$confirm('是否要变更用户状态?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
@@ -274,7 +277,7 @@ export default {
         let params = new URLSearchParams();
         params.append("ids", ids);
         params.append("status", status);
-        updateFloorShow(params).then(response => {
+        updateMemberStatus(params).then(response => {
           this.getList();
           this.$message({
             type: 'success',
@@ -302,20 +305,7 @@ export default {
       for (let i = 0; i < this.multipleSelection.length; i++) {
         ids.push(this.multipleSelection[i].id);
       }
-      if (this.operateType === 0) {
-        //设为启用
-        this.updateFloorShow(ids, 1);
-      } else if (this.operateType === 1) {
-        //取消启用
-        this.updateFloorShow(ids, 0);
-      } else {
-        this.$message({
-          message: '请选择批量操作类型',
-          type: 'warning',
-          duration: 1000
-        });
-        return;
-      }
+      this.handleUpdateStatus(ids, this.operateType);
     },
     handleAdd () {
       this.$router.push({ path: '/sms/addFloor' })
@@ -343,7 +333,7 @@ export default {
           this.getList();
           this.$message({
             type: 'success',
-            message: '删除成功!'
+            message: '操作成功!'
           });
         });
       })
