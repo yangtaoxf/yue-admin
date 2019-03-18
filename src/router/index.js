@@ -20,6 +20,7 @@ import Layout from '../views/layout/Layout'
  **/
 export const constantRouterMap = [
   { path: '/login', component: () => import('@/views/login/index'), hidden: true },
+  { path: '/register', component: () => import('@/views/scm/register'), hidden: true },
   { path: '/404', component: () => import('@/views/404'), hidden: true },
   {
     path: '',
@@ -212,6 +213,20 @@ export const constantRouterMap = [
         meta: { title: '会员管理', icon: 'user' }
       },
       {
+        path: 'addMember',
+        name: 'addMember',
+        component: () => import('@/views/ums/member/add'),
+        meta: { title: '添加会员', icon: 'member-add' },
+        hidden: true
+      },
+      {
+        path: 'updateMember',
+        name: 'updateMember',
+        component: () => import('@/views/ums/member/update'),
+        meta: { title: '编辑会员信息', icon: 'member-update' },
+        hidden: true
+      },
+      {
         path: 'address',
         name: 'address',
         component: () => import('@/views/ums/address'),
@@ -363,6 +378,33 @@ export const constantRouterMap = [
         component: () => import('@/views/sms/productCate/update'),
         meta: { title: '修改前台类目' },
         hidden: true
+      },
+    ]
+  },
+  {
+    path: '/rms',
+    component: Layout,
+    redirect: '/rms/role',
+    name: 'rms',
+    meta: { title: '权限管理', icon: 'quanxian' },
+    children: [
+      {
+        path: 'admin',
+        name: 'admin',
+        component: () => import('@/views/rms/admin'),
+        meta: { title: '管理员维护', icon: 'guanliyuan' }
+      },
+      {
+        path: 'role',
+        name: 'role',
+        component: () => import('@/views/rms/role'),
+        meta: { title: '角色管理', icon: 'role_icon' }
+      },
+      {
+        path: 'power',
+        name: 'power',
+        component: () => import('@/views/rms/power'),
+        meta: { title: '权限管理', icon: 'power' }
       },
     ]
   },

@@ -22,12 +22,12 @@
                  :model="listQuery"
                  size="small"
                  label-width="140px">
-          <el-form-item label="会员名称：">
+          <el-form-item label="角色名称：">
             <el-input v-model="listQuery.keyword"
                       class="input-width"
-                      placeholder="会员名称"></el-input>
+                      placeholder="角色名称"></el-input>
           </el-form-item>
-          <el-form-item label="帐号状态：">
+          <el-form-item label="状态：">
             <el-select v-model="listQuery.status"
                        placeholder="全部"
                        clearable
@@ -60,63 +60,33 @@
         <el-table-column type="selection"
                          width="60"
                          align="center"></el-table-column>
-        <el-table-column align="left"
-                         width="100px"
-                         label="会员ID"
-                         prop="id"
-                         sortable />
 
         <el-table-column align="left"
-                         label="会员名称"
-                         prop="username" />
+                         label="角色名称"
+                         width="280"
+                         prop="name" />
+
+        <el-table-column align="left"
+                         label="描述"
+                         prop="description" />
         <el-table-column align="center"
-                         label="昵称"
-                         prop="nickname" />
-        <el-table-column align="center"
-                         label="邮箱"
-                         prop="email" />
-
-        <el-table-column align="left"
-                         label="手机号码"
-                         prop="phone" />
-
-        <el-table-column align="left"
-                         label="性别"
-                         prop="gender">
-          <template slot-scope="scope">
-            {{ genderDic[scope.row.gender] }}
-          </template>
-        </el-table-column>
-
-        <el-table-column align="left"
-                         label="生日"
-                         prop="birthday" />
-
-        <el-table-column align="left"
-                         label="用户等级"
-                         prop="userLevel">
-          <template slot-scope="scope">
-            {{ levelDic[scope.row.userLevel] }}
-          </template>
-        </el-table-column>
-
-        <el-table-column align="left"
                          label="状态"
+                         width="60"
                          prop="status">
           <template slot-scope="scope">
-            {{ scope.row.status| memberStatus }}
+            {{ scope.row.status| roleStatus }}
           </template>
         </el-table-column>
-        <!-- <el-table-column align="left"
+        <el-table-column align="center"
                          label="操作"
-                         width="200"
+                         width="120"
                          class-name="small-padding fixed-width">
           <template slot-scope="scope">
             <el-button type="primary"
                        size="mini"
                        @click="handleUpdate(scope.row)">编辑</el-button>
           </template>
-        </el-table-column> -->
+        </el-table-column>
       </el-table>
     </div>
     <div class="batch-operate-container">
@@ -167,10 +137,12 @@
                    size="small">确 定</el-button>
       </span>
     </el-dialog>
+    <role-detail ref="roleInfo"></role-detail>
   </div>
 </template>
 <script>
-import { fetchList, createMember, updateMember, updateMemberStatus } from '@/api/member'
+import roleDetail from './components/RoleDetail'
+import { fetchList, createRole, updateRole, permission, permissionUpdate } from '@/api/role'
 
 const defaultListQuery = {
   pageNum: 1,
@@ -190,14 +162,10 @@ const defaultShowOptions = [
   {
     label: '启用',
     value: 1
-  },
-  {
-    label: '注销',
-    value: -2
   }
 ];
 export default {
-  name: 'memberList',
+  name: 'homeBrandList',
   data () {
     return {
       listQuery: Object.assign({}, defaultListQuery),
@@ -234,13 +202,14 @@ export default {
         }
       },
       sortDialogVisible: false,
-      sortDialogData: { sort: 0, id: null },
-      genderDic: ['未知', '男', '女'],
-      levelDic: ['普通用户', 'VIP用户', '高级VIP用户']
+      sortDialogData: { sort: 0, id: null }
     }
   },
   created () {
     this.getList();
+  },
+  components: {
+    roleDetail
   },
   filters: {
     formatRecommendStatus (status) {
@@ -273,7 +242,7 @@ export default {
     },
 
     handleUpdateStatus (ids, status) {
-      this.$confirm('是否要变更用户状态?', '提示', {
+      this.$confirm('是否要变更角色状态?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
@@ -312,11 +281,11 @@ export default {
       this.handleUpdateStatus(ids, this.operateType);
     },
     handleAdd () {
-      this.$router.push({ path: '/ums/addMember' })
+      this.$router.push({ path: '/sms/addFloor' })
     },
 
     handleUpdate (row) {
-      this.$router.push({ path: '/ums/updateMember', query: { id: row.id } })
+      this.$refs.roleInfo.showDrawer(row);
     },
     handleSelectSearch () {
       this.getDialogList();
@@ -349,14 +318,8 @@ export default {
         this.list = response.data.list;
         this.total = response.data.total;
       })
-    },
-
-    getDialogList () {
-      fetchBrandList(this.dialogData.listQuery).then(response => {
-        this.dialogData.list = response.data.list;
-        this.dialogData.total = response.data.total;
-      })
     }
+
   }
 }
 </script>

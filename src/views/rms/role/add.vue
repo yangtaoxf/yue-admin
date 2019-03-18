@@ -2,10 +2,10 @@
   <floor-detail :isEdit="false"></floor-detail>
 </template>
 <script>
-import MemberDetail from './components/MemberDetail'
+import FloorDetail from './components/FloorDetail'
 export default {
-  name: 'addMember',
-  components: { MemberDetail }
+  name: 'addFloor',
+  components: { FloorDetail }
 }
 </script>
 <style scoped>
