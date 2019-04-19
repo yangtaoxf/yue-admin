@@ -57,6 +57,15 @@
                   style="width: 300px"></el-input>
         <span style="margin-left: 20px">克</span>
       </el-form-item>
+      <el-form-item label="运费设置：">
+        <span>统一邮费</span>
+        <el-input v-model="value.uniformFreight"
+                  style="width: 100px">
+          <svg-icon slot="prefix"
+                    icon-class="qian" />
+        </el-input>
+
+      </el-form-item>
       <el-form-item label="排序">
         <el-input v-model="value.sort"></el-input>
       </el-form-item>

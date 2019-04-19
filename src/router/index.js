@@ -204,7 +204,7 @@ export const constantRouterMap = [
     component: Layout,
     redirect: '/ums/member',
     name: 'ums',
-    meta: { title: '会员管理', icon: 'user-manage' },
+    meta: { title: '会员', icon: 'user-manage' },
     children: [
       {
         path: 'member',
@@ -232,6 +232,69 @@ export const constantRouterMap = [
         component: () => import('@/views/ums/address'),
         meta: { title: '收货地址', icon: 'address' }
       },
+    ]
+  },
+  {
+    path: '/stm',
+    component: Layout,
+    redirect: '/stm/subject',
+    name: 'stm',
+    meta: { title: '专题', icon: 'zhuanti' },
+    children: [{
+      path: 'subject',
+      name: 'subject',
+      component: () => import('@/views/stm/subject/index'),
+      meta: { title: '专题列表', icon: 'product-list' }
+    },
+    {
+      path: 'addSubject',
+      name: 'addSubject',
+      component: () => import('@/views/stm/subject/add'),
+      meta: { title: '添加专题', icon: 'product-add' },
+      hidden: true
+    },
+    {
+      path: 'updateSubject',
+      name: 'updateSubject',
+      component: () => import('@/views/stm/subject/update'),
+      meta: { title: '修改专题', icon: 'product-add' },
+      hidden: true
+    },
+    {
+      path: 'subjectProductRelation',
+      name: 'subjectProductRelation',
+      component: () => import('@/views/stm/subject/productRelationList'),
+      meta: { title: '专题商品列表' },
+      hidden: true
+    },
+    {
+      path: 'subjectRecycle',
+      name: 'subjectRecycle',
+      component: () => import('@/views/stm/subject/index'),
+      meta: { title: '专题回收站', icon: 'subject-recycle' },
+      hidden: true
+    },
+
+    {
+      path: 'subjectCate',
+      name: 'subjectCate',
+      component: () => import('@/views/stm/subjectCate/index'),
+      meta: { title: '专题分类', icon: 'product-cate' }
+    },
+    {
+      path: 'addSubjectCate',
+      name: 'addSroductCate',
+      component: () => import('@/views/stm/subjectCate/add'),
+      meta: { title: '添加专题分类' },
+      hidden: true
+    },
+    {
+      path: 'updateProductCate',
+      name: 'updateProductCate',
+      component: () => import('@/views/stm/subjectCate/update'),
+      meta: { title: '修改专题分类' },
+      hidden: true
+    }
     ]
   },
   {
@@ -386,7 +449,7 @@ export const constantRouterMap = [
     component: Layout,
     redirect: '/rms/role',
     name: 'rms',
-    meta: { title: '权限管理', icon: 'quanxian' },
+    meta: { title: '权限', icon: 'quanxian' },
     children: [
       {
         path: 'admin',

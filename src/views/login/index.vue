@@ -13,7 +13,7 @@
             <svg-icon icon-class="login-mall"
                       style="width: 56px;height: 56px;color: #f70"></svg-icon>
           </div>
-          <h2 class="login-title color-main">桐源电商平台</h2>
+          <h2 class="login-title color-main">冕冠跨境电商平台</h2>
           <el-form-item prop="username">
             <el-input name="username"
                       type="text"
@@ -57,7 +57,7 @@
           <ul class="index-notice clearfix">
             <li>
               <h1>供应商入驻</h1>
-              <p>桐源诚邀合作伙伴，加入桐源供应链</p>
+              <p>冕冠诚邀合作伙伴，加入冕冠供应链</p>
               <a name="sop_index01_body_ruzhu_02"
                  target="_blank"
                  href="/#/register"

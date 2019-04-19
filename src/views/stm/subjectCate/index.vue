@@ -189,7 +189,6 @@ export default {
       });
     },
     handleShowNextLevel (index, row) {
-      this.listQuery.pageNum = 1;
       this.$router.push({ path: '/pms/productCate', query: { parentId: row.id } })
     },
     handleTransferProduct (index, row) {

@@ -34,7 +34,7 @@
                 <a-row>
                   <a-col :span="4"></a-col>
                   <a-col :span="16">
-                    <a-checkbox @change="agreeLicense">同意桐源平台服务协议、隐私权政策 及法律声明</a-checkbox>
+                    <a-checkbox @change="agreeLicense">同意冕冠平台服务协议、隐私权政策 及法律声明</a-checkbox>
                   </a-col>
                 </a-row>
                 <a-row class="steps-action">
