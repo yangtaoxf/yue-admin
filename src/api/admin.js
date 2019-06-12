@@ -10,7 +10,7 @@ export function fetchList (params) {
 
 export function createAdmin (data) {
   return request({
-    url: '/admin/create',
+    url: '/admin/register',
     method: 'post',
     data: data
   })
@@ -30,3 +30,11 @@ export function updateAdmin (id, data) {
     data: data
   })
 }
+export function updatePassword (id, data) {
+  return request({
+    url: '/admin/updatePassword/' + id,
+    method: 'post',
+    data: data
+  })
+}
+

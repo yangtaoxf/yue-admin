@@ -2,10 +2,10 @@
   <floor-detail :isEdit="true"></floor-detail>
 </template>
 <script>
-import MemberDetail from './components/MemberDetail'
+import memberDetail from './components/memberDetail'
 export default {
   name: 'updateMember',
-  components: { MemberDetail }
+  components: { memberDetail }
 }
 </script>
 <style scoped>

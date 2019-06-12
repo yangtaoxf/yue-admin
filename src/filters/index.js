@@ -59,14 +59,21 @@ export function powerStatus (val) {
   return label;
 }
 
+export function drpPromoterApplyStatus (val) {
+  var aTypes = global_.drpPromoterApplyStatus
+  for (var index in aTypes) {
+    var item = aTypes[index];
+    if (item.value == val) {
+      return item.label;
+    }
+  }
+}
 
-
-
-export function formatAdvertiseType (type) {
+export function formatAdvertiseType (val) {
   var aTypes = global_.defaultAdvertiseTypeOptions
   for (var index in aTypes) {
     var item = aTypes[index];
-    if (item.value == type) {
+    if (item.value == val) {
       return item.label;
     }
   }

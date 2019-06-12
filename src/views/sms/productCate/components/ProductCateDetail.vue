@@ -90,7 +90,7 @@
 import { fetchList, createProductCate, updateProductCate, getProductCate, fetchListWithChildren } from '@/api/productFrontCate';
 import { fetchListWithAttr } from '@/api/productAttrCate';
 import { getProductAttrInfo } from '@/api/productAttr';
-import SingleUpload from '@/components/Upload/singleUpload';
+import SingleUpload from '@/components/Upload/aliyun/singleUpload';
 import { fetchListWithChildren as fetchListWithProductCate } from '@/api/productCate'
 const defaultProductCate = {
   description: '',

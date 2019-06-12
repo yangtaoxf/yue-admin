@@ -22,13 +22,17 @@ export const constantRouterMap = [
   { path: '/login', component: () => import('@/views/login/index'), hidden: true },
   { path: '/register', component: () => import('@/views/scm/register'), hidden: true },
   { path: '/404', component: () => import('@/views/404'), hidden: true },
+
   {
     path: '',
     component: Layout,
     redirect: '/home',
+    isLeaf: true,
+    isForever: true,
     children: [{
       path: 'home',
       name: 'home',
+      isForever: true,
       component: () => import('@/views/home/index'),
       meta: { title: '首页', icon: 'home' }
     }]
@@ -44,7 +48,7 @@ export const constantRouterMap = [
     meta: { title: '商品', icon: 'product' },
     children: [{
       path: 'product',
-      name: 'product',
+      name: 'productList',
       component: () => import('@/views/pms/product/index'),
       meta: { title: '商品列表', icon: 'product-list' }
     },
@@ -124,7 +128,7 @@ export const constantRouterMap = [
     },
     {
       path: 'brand',
-      name: 'brand',
+      name: 'brandManage',
       component: () => import('@/views/pms/brand/index'),
       meta: { title: '品牌管理', icon: 'product-brand' }
     },
@@ -231,6 +235,12 @@ export const constantRouterMap = [
         name: 'address',
         component: () => import('@/views/ums/address'),
         meta: { title: '收货地址', icon: 'address' }
+      },
+      {
+        path: 'feedback',
+        name: 'feedback',
+        component: () => import('@/views/ums/feedback'),
+        meta: { title: '反馈', icon: 'fankui' }
       },
     ]
   },
@@ -442,6 +452,116 @@ export const constantRouterMap = [
         meta: { title: '修改前台类目' },
         hidden: true
       },
+      {
+        path: 'drp',
+        name: 'drp',
+        component: () => import('@/views/drp/index'),
+        meta: { title: '分销员', icon: 'tuiguang' },
+        children: [
+          {
+            path: 'promoter',
+            name: 'drp-promoter',
+
+            component: () => import('@/views/drp/promoter/index'),
+            meta: { title: '分销员' },
+            hidden: true,
+
+            children: [
+              {
+                path: 'promoter-list',
+                name: 'promoter-list',
+                component: () => import('@/views/drp/promoter/list/index'),
+                meta: { title: '分销员' },
+                hidden: true
+              },
+              {
+                path: 'promoter-review',
+                name: 'promoter-review',
+                component: () => import('@/views/drp/promoter/review'),
+                meta: { title: '审核信息' },
+                hidden: true
+              },
+            ]
+          },
+          {
+            path: 'product',
+            name: 'drp-goods',
+            component: () => import('@/views/drp/product/index'),
+            meta: { title: '商品列表' },
+            hidden: true
+          },
+          {
+            path: 'effect',
+            name: 'drp-effect',
+            component: () => import('@/views/drp/effect/index'),
+            meta: { title: '佣金明细' },
+            hidden: true
+          },
+          {
+            path: 'statistics',
+            name: 'drp-count',
+            component: () => import('@/views/drp/statistics/index'),
+            meta: { title: '业绩统计' },
+            hidden: true,
+            children: [
+              {
+                path: 'count-performance',
+                name: 'count-performance',
+                component: () => import('@/views/drp/statistics/performance'),
+                meta: { title: '业绩统计' },
+                hidden: true
+              },
+              {
+                path: 'count-statistics',
+                name: 'count-statistics',
+                component: () => import('@/views/drp/statistics/commission'),
+                meta: { title: '佣金统计' },
+                hidden: true
+              },
+            ]
+          },
+          {
+            path: 'setting',
+            name: 'drp-setting',
+            component: () => import('@/views/drp/setting/index'),
+            meta: { title: '设置' },
+            hidden: true,
+            children: [
+              {
+                path: 'base-setting',
+                name: 'base-setting',
+                component: () => import('@/views/drp/setting/base'),
+                meta: { title: '基础设置' },
+                hidden: true
+              },
+              {
+                path: 'common-setting',
+                name: 'common-setting',
+                component: () => import('@/views/drp/setting/common'),
+                meta: { title: '通用设置' },
+                hidden: true
+              },
+            ]
+          },
+
+          {
+            path: 'plan',
+            name: 'drp-plan',
+            component: () => import('@/views/drp/plan/index'),
+            meta: { title: '招募计划' },
+            hidden: true
+          },
+          {
+            path: 'cashout',
+            name: 'drp-cashout',
+            component: () => import('@/views/drp/cashout/index'),
+            meta: { title: '提现审核' },
+            hidden: true
+          },
+
+
+        ]
+      }
     ]
   },
   {
@@ -455,7 +575,21 @@ export const constantRouterMap = [
         path: 'admin',
         name: 'admin',
         component: () => import('@/views/rms/admin'),
-        meta: { title: '管理员维护', icon: 'guanliyuan' }
+        meta: { title: '管理员维护', icon: 'guanliyuan' },
+
+      },
+      {
+        path: 'addAdmin',
+        name: 'addAdmin',
+        component: () => import('@/views/rms/admin/add'),
+        meta: { title: '添加管理员' },
+        hidden: true
+      }, {
+        path: 'updateAdmin',
+        name: 'updateAdmin',
+        component: () => import('@/views/rms/admin/update'),
+        meta: { title: '编辑管理员' },
+        hidden: true
       },
       {
         path: 'role',
@@ -467,10 +601,11 @@ export const constantRouterMap = [
         path: 'power',
         name: 'power',
         component: () => import('@/views/rms/power'),
-        meta: { title: '权限管理', icon: 'power' }
+        meta: { title: '资源管理', icon: 'power' }
       },
     ]
   },
+
   { path: '*', redirect: '/404', hidden: true }
 ]
 

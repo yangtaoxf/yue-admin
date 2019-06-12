@@ -4,7 +4,7 @@
             @close="onClose"
             :visible="visible"
             :wrapStyle="{height: 'calc(100% - 108px)',overflow: 'auto',paddingBottom: '108px'}"
-            v-if="this.role.id">
+            v-if="visible">
     <a-tree checkable
             @expand="onExpand"
             :expandedKeys="expandedKeys"
@@ -50,6 +50,7 @@ export default {
   },
   methods: {
     showDrawer (role) {
+      console.log(role);
       this.role = role;
       this.visible = true;
       this.initData();

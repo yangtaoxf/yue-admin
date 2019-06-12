@@ -35,9 +35,9 @@
              shadow="never">
       <i class="el-icon-tickets"></i>
       <span>数据列表</span>
-      <!-- <el-button size="mini"
+      <el-button size="mini"
                  class="btn-add"
-                 @click="handleAdd()">添加</el-button> -->
+                 @click="handleAdd()">添加</el-button>
     </el-card>
     <div class="table-container">
       <el-table ref="homeBrandTable"
@@ -50,13 +50,18 @@
                          width="60"
                          align="left"></el-table-column>
         <el-table-column align="left"
-                         width="100"
-                         label="管理员名称"
-                         prop="username" />
+                         width="200"
+                         label="登陆账号"
+                         prop="username">
+          <template slot-scope="scope">
+            <a-avatar :src="scope.row.icon" />
+            {{ scope.row.username }}
+          </template>
+        </el-table-column>
         <el-table-column align="left"
                          width="100"
-                         label="昵称"
-                         prop="nickname" />
+                         label="姓名"
+                         prop="fullname" />
         <el-table-column align="left"
                          width="180"
                          label="邮箱"
@@ -66,12 +71,6 @@
                          width="120"
                          label="手机号码"
                          prop="phone" />
-
-        <el-table-column align="left"
-                         label="头像"
-                         prop="icon">
-
-        </el-table-column>
 
         <el-table-column align="left"
                          label="备注"
@@ -87,12 +86,15 @@
         </el-table-column>
         <el-table-column align="left"
                          label="操作"
-                         width="100"
+                         width="180"
                          class-name="small-padding fixed-width">
           <template slot-scope="scope">
             <el-button type="primary"
                        size="mini"
                        @click="handleUpdate(scope.row)">编辑</el-button>
+            <el-button type="primary"
+                       size="mini"
+                       @click="handlePasswordReset(scope.row)">密码重置</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -126,29 +128,22 @@
                      :total="total">
       </el-pagination>
     </div>
-
-    <el-dialog title="设置排序"
-               :visible.sync="sortDialogVisible"
-               width="40%">
-      <el-form :model="sortDialogData"
-               label-width="150px">
-        <el-form-item label="排序：">
-          <el-input v-model="sortDialogData.sort"
-                    style="width: 200px"></el-input>
-        </el-form-item>
-      </el-form>
-      <span slot="footer">
-        <el-button @click="sortDialogVisible = false"
-                   size="small">取 消</el-button>
-        <el-button type="primary"
-                   @click="handleUpdateSort"
-                   size="small">确 定</el-button>
-      </span>
-    </el-dialog>
+    <a-modal title="密码重置"
+             v-model="visible"
+             @ok="passwordReset"
+             okText="确认"
+             cancelText="取消">
+      <p>账号:{{currentRow.username}}</p>
+      <p>姓名:{{currentRow.fullname}}</p>
+      <p>新密码:
+        <el-input v-model="currentRow.password"
+                  show-password></el-input>
+      </p>
+    </a-modal>
   </div>
 </template>
 <script>
-import { fetchList, createAdmin, updateAdmin } from '@/api/admin'
+import { fetchList, createAdmin, updateAdmin, updatePassword } from '@/api/admin'
 
 const defaultListQuery = {
   pageNum: 1,
@@ -177,6 +172,7 @@ export default {
   name: 'memberList',
   data () {
     return {
+      visible: false,
       listQuery: Object.assign({}, defaultListQuery),
       showOptions: Object.assign({}, defaultShowOptions),
       list: null,
@@ -199,25 +195,13 @@ export default {
 
       ],
       operateType: null,
-      selectDialogVisible: false,
-      dialogData: {
-        list: null,
-        total: null,
-        multipleSelection: [],
-        listQuery: {
-          keyword: null,
-          pageNum: 1,
-          pageSize: 5
-        }
-      },
-      sortDialogVisible: false,
-      sortDialogData: { sort: 0, id: null },
-      genderDic: ['未知', '男', '女'],
-      levelDic: ['普通用户', 'VIP用户', '高级VIP用户']
+      currentRow: {}
+
     }
   },
   created () {
     this.getList();
+
   },
   filters: {
     formatRecommendStatus (status) {
@@ -289,35 +273,30 @@ export default {
       this.handleUpdateStatus(ids, this.operateType);
     },
     handleAdd () {
-      this.$router.push({ path: '/ums/addMember' })
+      this.$router.push({ path: '/rms/addAdmin' })
     },
-
-    handleUpdate (row) {
-      this.$router.push({ path: '/ums/updateMember', query: { id: row.id } })
+    handlePasswordReset (row) {
+      this.visible = true;
+      this.currentRow = row
     },
-    handleSelectSearch () {
-      this.getDialogList();
-    },
-    handleEditSort (index, row) {
-      this.sortDialogVisible = true;
-      this.sortDialogData.sort = row.sort;
-      this.sortDialogData.id = row.id;
-    },
-    handleUpdateSort () {
-      this.$confirm('是否要修改排序?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        updateHomeBrandSort(this.sortDialogData).then(response => {
-          this.sortDialogVisible = false;
-          this.getList();
-          this.$message({
-            type: 'success',
-            message: '操作成功!'
-          });
+    passwordReset () {
+      var id = this.currentRow.id;
+      var params = {
+        id: this.currentRow.id,
+        password: this.currentRow.password
+      }
+      updatePassword(id, params).then(response => {
+        this.getList();
+        this.$message({
+          type: 'success',
+          message: '修改成功!'
         });
-      })
+      });
+      this.visible = false;
+
+    },
+    handleUpdate (row) {
+      this.$router.push({ path: '/rms/updateAdmin', query: { id: row.id } })
     },
     getList () {
       this.listLoading = true;
@@ -328,12 +307,6 @@ export default {
       })
     },
 
-    getDialogList () {
-      fetchBrandList(this.dialogData.listQuery).then(response => {
-        this.dialogData.list = response.data.list;
-        this.dialogData.total = response.data.total;
-      })
-    }
   }
 }
 </script>

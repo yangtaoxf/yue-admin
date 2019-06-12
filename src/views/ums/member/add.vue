@@ -1,11 +1,11 @@
 <template> 
-  <floor-detail :isEdit="false"></floor-detail>
+  <member-detail :isEdit="false"></member-detail>
 </template>
 <script>
-import MemberDetail from './components/MemberDetail'
+import memberDetail from './components/memberDetail'
 export default {
   name: 'addMember',
-  components: { MemberDetail }
+  components: { memberDetail }
 }
 </script>
 <style scoped>

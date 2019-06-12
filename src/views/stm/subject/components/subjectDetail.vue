@@ -1,4 +1,4 @@
-<template> 
+<template>
   <el-card class="form-container"
            shadow="never">
     <el-form :model="subject"
@@ -46,8 +46,8 @@
 </template>
 <script>
 import { createSubject, getSubject, updateSubject } from '@/api/subject'
-import SingleUpload from '@/components/Upload/singleUpload'
-import MultiUpload from '@/components/Upload/multiUpload'
+import SingleUpload from '@/components/Upload/qiniu/singleUpload'
+import MultiUpload from '@/components/Upload/qiniu/multiUpload'
 import Tinymce from '@/components/Tinymce'
 const defaultSubject = {
   categoryId: '',

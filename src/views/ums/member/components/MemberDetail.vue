@@ -52,7 +52,7 @@
 </template>
 <script>
 import { createBrand, getBrand, updateBrand } from '@/api/brand'
-import SingleUpload from '@/components/Upload/singleUpload'
+import SingleUpload from '@/components/Upload/aliyun/singleUpload'
 const defaultMember = {
   bigPic: '',
   brandStory: '',
@@ -64,7 +64,7 @@ const defaultMember = {
   sort: 0
 };
 export default {
-  name: 'BrandDetail',
+  name: 'memberDetail',
   components: { SingleUpload },
   props: {
     isEdit: {

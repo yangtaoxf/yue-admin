@@ -152,6 +152,11 @@
       <el-form-item label="商品相册：">
         <multi-upload v-model="selectProductPics"></multi-upload>
       </el-form-item>
+      <el-form-item label="主图视频：">
+
+        <localVideoUpload v-model="value.video"></localVideoUpload>
+
+      </el-form-item>
       <el-form-item label="规格参数：">
         <el-tabs v-model="activeHtmlName"
                  type="card">
@@ -181,26 +186,15 @@
 <script>
 import { fetchList as fetchProductAttrCateList } from '@/api/productAttrCate'
 import { fetchList as fetchProductAttrList } from '@/api/productAttr'
-import SingleUpload from '@/components/Upload/singleUpload'
-import MultiUpload from '@/components/Upload/multiUpload'
+import SingleUpload from '@/components/Upload/qiniu/singleUpload'
+import MultiUpload from '@/components/Upload/qiniu/multiUpload'
+import localVideoUpload from '@/components/Upload/localVideoUpload'
+
 import Tinymce from '@/components/Tinymce'
-// var skus = [
-//   {
-//     "skuCode": "",
-//     "price": "",
-//     "stock": "9999",
-//     "lowStock": 10,
-//     "values": [
-//       {
-//         "attrId": "",
-//         "value": ""
-//       }
-//     ]
-//   }
-// ];
+
 export default {
   name: "ProductAttrDetail",
-  components: { SingleUpload, MultiUpload, Tinymce },
+  components: { SingleUpload, MultiUpload, Tinymce, localVideoUpload },
   props: {
     value: Object,
     isEdit: {

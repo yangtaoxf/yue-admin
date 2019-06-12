@@ -115,7 +115,7 @@
 </template>
 <script>
 
-import { fetchList } from '@/api/subject';
+import { fetchList, deleteSubject } from '@/api/subject';
 import { formatDate } from '@/utils/date';
 
 const defaultListQuery = {
@@ -126,7 +126,7 @@ const defaultListQuery = {
 };
 
 export default {
-  name: 'homeSubjectList',
+  name: 'subjectList',
   data () {
     return {
       listQuery: Object.assign({}, defaultListQuery),
@@ -135,7 +135,6 @@ export default {
       listLoading: false,
       multipleSelection: [],
       operates: [
-
         {
           label: "删除",
           value: 2
@@ -188,7 +187,7 @@ export default {
       this.getList();
     },
     handleDelete (index, row) {
-      this.deleteSubject(row.id);
+      this.goDeleteSubject(row.id);
     },
     handleSelectSession (index, row) {
       this.$router.push({ path: '/stm/subjectProductRelation', query: { subjectId: row.id } })
@@ -212,7 +211,7 @@ export default {
       }
       if (this.operateType === 2) {
         //删除
-        this.deleteSubject(ids);
+        this.goDeleteSubject(ids);
       } else {
         this.$message({
           message: '请选择批量操作类型',
@@ -234,7 +233,7 @@ export default {
       })
     },
 
-    deleteSubject (ids) {
+    goDeleteSubject (ids) {
       this.$confirm('是否要删除该推荐?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -242,7 +241,7 @@ export default {
       }).then(() => {
         let params = new URLSearchParams();
         params.append("ids", ids);
-        deleteHomeSubject(params).then(response => {
+        deleteSubject(params).then(response => {
           this.getList();
           this.$message({
             type: 'success',

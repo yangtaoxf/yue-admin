@@ -44,7 +44,7 @@
 </template>
 <script>
   import {createBrand, getBrand, updateBrand} from '@/api/brand'
-  import SingleUpload from '@/components/Upload/singleUpload'
+  import SingleUpload from '@/components/Upload/aliyun/singleUpload'
   const defaultBrand={
     bigPic: '',
     brandStory: '',

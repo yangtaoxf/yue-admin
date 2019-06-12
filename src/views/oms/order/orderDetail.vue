@@ -261,11 +261,11 @@
                   class="table-cell">-￥{{order.discountAmount}}</el-col>
           <el-col :span="6"
                   class="table-cell">
-            <span class="color-danger">￥{{order.totalAmount+order.freightAmount}}</span>
+            <span class="color-danger">￥{{order.totalAmount}}</span>
           </el-col>
           <el-col :span="6"
                   class="table-cell">
-            <span class="color-danger">￥{{order.payAmount+order.freightAmount-order.discountAmount}}</span>
+            <span class="color-danger">￥{{order.payAmount}}</span>
           </el-col>
         </el-row>
       </div>
@@ -299,20 +299,7 @@
             {{scope.row.orderStatus | formatStatus}}
           </template>
         </el-table-column>
-        <el-table-column label="付款状态"
-                         width="120"
-                         align="center">
-          <template slot-scope="scope">
-            {{scope.row.orderStatus | formatPayStatus}}
-          </template>
-        </el-table-column>
-        <el-table-column label="发货状态"
-                         width="120"
-                         align="center">
-          <template slot-scope="scope">
-            {{scope.row.orderStatus | formatDeliverStatus}}
-          </template>
-        </el-table-column>
+
         <el-table-column label="备注"
                          align="center">
           <template slot-scope="scope">
@@ -394,7 +381,7 @@
           <el-col :span="6"
                   class="table-cell-title">折扣金额</el-col>
           <el-col :span="6"
-                  class="table-cell-title">订单总金额</el-col>
+                  class="table-cell-title">订单商品总金额</el-col>
           <el-col :span="6"
                   class="table-cell-title">应付款金额</el-col>
         </el-row>
@@ -408,11 +395,11 @@
           </el-col>
           <el-col :span="6"
                   class="table-cell">
-            <span class="color-danger">￥{{order.totalAmount+moneyInfo.freightAmount}}</span>
+            <span class="color-danger">￥{{order.totalAmount}}</span>
           </el-col>
           <el-col :span="6"
                   class="table-cell">
-            <span class="color-danger">￥{{order.payAmount+moneyInfo.freightAmount-moneyInfo.discountAmount}}</span>
+            <span class="color-danger">￥{{order.payAmount}}</span>
           </el-col>
         </el-row>
       </div>

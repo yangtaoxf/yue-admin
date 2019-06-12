@@ -314,7 +314,7 @@ export default {
       for (let i = 0; i < this.dialogData.multipleSelection.length; i++) {
         productIds.push(this.dialogData.multipleSelection[i].id);
       }
-      this.$confirm('使用要进行添加操作?', '提示', {
+      this.$confirm('确定要进行添加操作?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'

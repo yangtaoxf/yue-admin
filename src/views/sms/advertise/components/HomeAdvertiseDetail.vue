@@ -1,74 +1,105 @@
-<template> 
-  <el-card class="form-container"
-           shadow="never">
-    <el-form :model="homeAdvertise"
-             :rules="rules"
-             ref="homeAdvertiseFrom"
-             label-width="150px"
-             size="small">
-      <el-form-item label="广告名称："
-                    prop="name">
-        <el-input v-model="homeAdvertise.name"
-                  class="input-width"></el-input>
-      </el-form-item>
-      <el-form-item label="广告位置：">
-        <el-select v-model="homeAdvertise.type">
-          <el-option v-for="type in typeOptions"
-                     :key="type.value"
-                     :label="type.label"
-                     :value="type.value">
-          </el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="开始时间："
-                    prop="startTime">
-        <el-date-picker type="datetime"
-                        placeholder="选择日期"
-                        v-model="homeAdvertise.startTime"></el-date-picker>
-      </el-form-item>
-      <el-form-item label="到期时间："
-                    prop="endTime">
-        <el-date-picker type="datetime"
-                        placeholder="选择日期"
-                        v-model="homeAdvertise.endTime"></el-date-picker>
-      </el-form-item>
-      <el-form-item label="上线/下线：">
-        <el-radio-group v-model="homeAdvertise.status">
-          <el-radio :label="0">下线</el-radio>
-          <el-radio :label="1">上线</el-radio>
-        </el-radio-group>
-      </el-form-item>
-      <el-form-item label="广告图片：">
-        <single-upload v-model="homeAdvertise.pic"></single-upload>
-      </el-form-item>
-      <el-form-item label="排序：">
-        <el-input v-model="homeAdvertise.sort"
-                  class="input-width"></el-input>
-      </el-form-item>
-      <el-form-item label="广告链接："
-                    prop="url">
-        <el-input v-model="homeAdvertise.url"
-                  class="input-width"></el-input>
-      </el-form-item>
-      <el-form-item label="广告备注：">
-        <el-input class="input-width"
-                  type="textarea"
-                  :rows="5"
-                  placeholder="请输入内容"
-                  v-model="homeAdvertise.note">
-        </el-input>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary"
-                   @click="onSubmit('homeAdvertiseFrom')">提交</el-button>
-        <el-button v-if="!isEdit"
-                   @click="resetForm('homeAdvertiseFrom')">重置</el-button>
-      </el-form-item>
-    </el-form>
-  </el-card>
+<template>
+  <div>
+    <el-card class="form-container"
+             shadow="never">
+      <el-form :model="homeAdvertise"
+               :rules="rules"
+               ref="homeAdvertiseFrom"
+               label-width="150px"
+               size="small">
+        <el-form-item label="广告名称："
+                      prop="name">
+          <el-input v-model="homeAdvertise.name"
+                    class="input-width"></el-input>
+        </el-form-item>
+        <el-form-item label="广告位置：">
+          <el-select v-model="homeAdvertise.type">
+            <el-option v-for="type in typeOptions"
+                       :key="type.value"
+                       :label="type.label"
+                       :value="type.value">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="开始时间："
+                      prop="startTime">
+          <el-date-picker type="datetime"
+                          placeholder="选择日期"
+                          v-model="homeAdvertise.startTime"></el-date-picker>
+        </el-form-item>
+        <el-form-item label="到期时间："
+                      prop="endTime">
+          <el-date-picker type="datetime"
+                          placeholder="选择日期"
+                          v-model="homeAdvertise.endTime"></el-date-picker>
+        </el-form-item>
+        <el-form-item label="上线/下线：">
+          <el-radio-group v-model="homeAdvertise.status">
+            <el-radio :label="0">下线</el-radio>
+            <el-radio :label="1">上线</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="广告图片：">
+          <single-upload v-model="homeAdvertise.pic"></single-upload>
+        </el-form-item>
+        <el-form-item label="排序：">
+          <el-input v-model="homeAdvertise.sort"
+                    class="input-width"></el-input>
+        </el-form-item>
+        <el-form-item label="广告链接："
+                      prop="url">
+          <el-input v-model="homeAdvertise.url"
+                    class="input-width"></el-input>
+          <el-dropdown @command="handleLinkCommand">
+            <span class="el-dropdown-link">
+              链接设置
+            </span>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item command='{"p":"w","v":"product"}'> 关联商品</el-dropdown-item>
+              <el-dropdown-item command='{"p":"w","v":"category"}'>关联分类</el-dropdown-item>
+              <el-dropdown-item command='{"p":"w","v":"subject"}'>关联专题</el-dropdown-item>
+              <el-dropdown-item command='{"p":"w","v":"miniprogram"}'>小程序跳转</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+        </el-form-item>
+        <el-form-item label="广告备注：">
+          <el-input class="input-width"
+                    type="textarea"
+                    :rows="5"
+                    placeholder="请输入内容"
+                    v-model="homeAdvertise.note">
+          </el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary"
+                     @click="onSubmit('homeAdvertiseFrom')">提交</el-button>
+          <el-button v-if="!isEdit"
+                     @click="resetForm('homeAdvertiseFrom')">重置</el-button>
+        </el-form-item>
+      </el-form>
+    </el-card>
+
+    <select-product ref="linkProductDialog"
+                    :multiSelect="false"
+                    @selectdProduct="setLink"></select-product>
+    <selectFrontCategory ref="linkCategoryDialog"
+                         :multiSelect="false"
+                         @selectdProductCategory="setLink"></selectFrontCategory>
+    <select-subject ref="linkSubjectDialog"
+                    :multiSelect="false"
+                    @selectdSubject="setLink"></select-subject>
+    <miniprogram-link ref="linkPage"
+                      @selectdLink="setLink"></miniprogram-link>
+
+  </div>
 </template>
 <script>
-import SingleUpload from '@/components/Upload/singleUpload'
+import SingleUpload from '@/components/Upload/aliyun/singleUpload'
+import selectProduct from '@/components/Select/product'
+import selectSubject from '@/components/Select/subject'
+import miniprogramLink from '@/components/Select/miniprogramLink'
+
+import selectFrontCategory from '@/components/Select/frontCategory'
 import { createHomeAdvertise, getHomeAdvertise, updateHomeAdvertise } from '@/api/homeAdvertise'
 const defaultHomeAdvertise = {
   name: null,
@@ -83,8 +114,8 @@ const defaultHomeAdvertise = {
 };
 
 export default {
-  name: 'HomeAdvertiseDetail',
-  components: { SingleUpload },
+
+  components: { SingleUpload, selectProduct, selectFrontCategory, selectSubject, miniprogramLink },
   props: {
     isEdit: {
       type: Boolean,
@@ -116,15 +147,51 @@ export default {
     }
   },
   created () {
+    this.homeAdvertise = Object.assign({}, defaultHomeAdvertise);
     if (this.isEdit) {
       getHomeAdvertise(this.$route.query.id).then(response => {
+        console.log(response.data);
         this.homeAdvertise = response.data;
       });
-    } else {
-      this.homeAdvertise = Object.assign({}, defaultHomeAdvertise);
     }
   },
   methods: {
+    handleLinkCommand (command, event) {
+      this.currentLinkCommand = JSON.parse(command);
+      console.log(this.currentLinkCommand);
+      if (this.currentLinkCommand.p == "b") {
+        this.currentBannerIndex = event.$attrs.index;
+      }
+      switch (this.currentLinkCommand.v) {
+        case "product":
+          this.$refs.linkProductDialog.show();
+          break;
+        case "category":
+          this.$refs.linkCategoryDialog.show();
+          break;
+        case "subject":
+          this.$refs.linkSubjectDialog.show();
+          break;
+        case "miniprogram":
+          this.$refs.linkPage.show();
+          break;
+        default:
+      }
+    },
+    setLink (data) {
+      var tempLink;
+      if (this.currentLinkCommand.v == "miniprogram") {
+        tempLink = data;
+      } else {
+        data = data[0];
+        tempLink = {
+          type: this.currentLinkCommand.v,
+          dataId: data.id,
+          dataName: data.name
+        }
+      }
+      this.homeAdvertise.url = JSON.stringify(tempLink);
+    },
     onSubmit (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {

@@ -22,10 +22,12 @@ export function createSubject (data) {
   })
 }
 
-export function deleteSubject (id) {
+
+export function deleteSubject (data) {
   return request({
-    url: '/subject/delete/' + id,
-    method: 'get',
+    url: '/subject/delete/',
+    method: 'post',
+    data: data
   })
 }
 

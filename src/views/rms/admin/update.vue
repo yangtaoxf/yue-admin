@@ -1,11 +1,11 @@
 <template> 
-  <floor-detail :isEdit="true"></floor-detail>
+  <admin-detail :isEdit="true"></admin-detail>
 </template>
 <script>
-import FloorDetail from './components/FloorDetail'
+import adminDetail from './components/adminDetail'
 export default {
-  name: 'updateFloor',
-  components: { FloorDetail }
+  name: 'updateAdmin',
+  components: { adminDetail }
 }
 </script>
 <style scoped>

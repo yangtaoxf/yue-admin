@@ -1,4 +1,4 @@
-<template> 
+<template>
   <div>
     <el-card class="form-container"
              shadow="never">
@@ -43,7 +43,8 @@
                 <h2 class="title">
                   {{floor.title}}
                 </h2>
-                <div class="hot-word-con"> <a class="hot-word">
+                <div class="hot-word-con">
+                  <a class="hot-word">
                     <el-dropdown @command="handleLinkCommand">
                       <span class="el-dropdown-link">
                         链接设置
@@ -52,15 +53,17 @@
                       <el-dropdown-menu slot="dropdown">
                         <el-dropdown-item command='{"p":"w","v":"product"}'> 关联商品</el-dropdown-item>
                         <el-dropdown-item command='{"p":"w","v":"category"}'>关联分类</el-dropdown-item>
-                        <el-dropdown-item command='{"p":"w","v":"subject"}'>关联主题</el-dropdown-item>
+                        <el-dropdown-item command='{"p":"w","v":"subject"}'>关联专题</el-dropdown-item>
                       </el-dropdown-menu>
                     </el-dropdown>
-                  </a> <a class="hot-word"
+                  </a>
+                  <a class="hot-word"
                      @click="delLink(index)"
                      v-for="(data,index ) in demoLinks"
                      :key="data.dataId">{{data.dataName}}
                     <svg-icon icon-class="close" />
-                  </a></div>
+                  </a>
+                </div>
                 <!-- <div class="more"><a class="more-link"
                      href=""
                      target="_blank">查看全部
@@ -106,10 +109,17 @@
                       <div class="figure figure-img">
                         <a class="exposure">
                           <img :src="data.pic"
-                               :alt="data.name"></a> </div>
-                      <h3 class="title"> <a>{{data.name}}</a></h3>
+                               :alt="data.name"></a>
+                      </div>
+                      <h3 class="title">
+                        <a>{{data.name}}</a>
+                      </h3>
                       <p class="desc">{{data.desc}}</p>
-                      <p class="price"> <span class="num">{{data.price}}</span>元 <del><span class="num">1999</span>元</del> </p>
+                      <p class="price">
+                        <span class="num">{{data.price}}</span>元
+                        <del>
+                          <span class="num">1999</span>元</del>
+                      </p>
                     </li>
                   </ul>
                 </div>
@@ -134,7 +144,7 @@
 </template>
 <script>
 import { createFloor, getFloor, updateFloor } from '@/api/pageFloor';
-import againUpload from '@/components/Upload/againUpload'
+import againUpload from '@/components/Upload/qiniu/againUpload'
 import selectProduct from '@/components/Select/product'
 import selectFrontCategory from '@/components/Select/frontCategory'
 

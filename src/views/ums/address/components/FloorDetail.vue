@@ -134,7 +134,7 @@
 </template>
 <script>
 import { createFloor, getFloor, updateFloor } from '@/api/pageFloor';
-import againUpload from '@/components/Upload/againUpload'
+import againUpload from '@/components/Upload/aliyun/againUpload'
 import selectProduct from '@/components/Select/product'
 import selectProductCategory from '@/components/Select/productCategory'
 
