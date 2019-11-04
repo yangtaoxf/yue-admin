@@ -20,6 +20,7 @@
                        :value="type.value">
             </el-option>
           </el-select>
+
         </el-form-item>
         <el-form-item label="开始时间："
                       prop="startTime">
@@ -39,7 +40,9 @@
             <el-radio :label="1">上线</el-radio>
           </el-radio-group>
         </el-form-item>
+
         <el-form-item label="广告图片：">
+          <div>小程序端主页图片尺寸750*418</div>
           <single-upload v-model="homeAdvertise.pic"></single-upload>
         </el-form-item>
         <el-form-item label="排序：">

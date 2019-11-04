@@ -150,6 +150,7 @@
         </el-card>
       </el-form-item>
       <el-form-item label="商品相册：">
+        <div>图片尺寸418*418</div>
         <multi-upload v-model="selectProductPics"></multi-upload>
       </el-form-item>
       <el-form-item label="主图视频：">
